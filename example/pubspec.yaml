@@ -1,0 +1,28 @@
+name: ui_extension_examples
+description: Examples for ui_extension.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.1.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_animate: 
+    git:
+      url: https://github.com/arthurbcd/flutter_animate/
+      ref: 484dca33a55df1c31d54549971ecee746855ec1e
+  get: ^4.6.5
+  styled_widget: ^0.4.1
+  ui_extension:
+    path: ../
+    
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  uses-material-design: true
