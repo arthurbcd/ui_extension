@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+// import 'package:styled_widget/styled_widget.dart';
 import 'package:ui_extension/ui_extension.dart';
 // import 'package:styled_widget/styled_widget.dart';
 
@@ -18,15 +19,35 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Positioned.
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            child: Stack(
+        body: UiPadding(
+          left: 80.0,
+          children: const [
+            UiAlign(alignment: Alignment.bottomCenter),
+            UiPadding(padding: EdgeInsets.all(8), left: 18),
+          ],
+          child: Center(
+            child: Column(
               children: [
-                const Ui() //
-                    .color(Colors.blueGrey, duration: 1.seconds)
-                    .positioned(all: 0),
+                const Ui(
+                  children: [],
+                ),
+                Ui(
+                  children: const [
+                    UiAlign(alignment: Alignment.center),
+                    UiConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 100)),
+                    UiPadding(padding: EdgeInsets.all(8)),
+                  ],
+                  child: const Text('data')
+                      .ui()
+                      .align(Alignment.center)
+                      .constrained(const BoxConstraints(maxWidth: 100))
+                      .padding(padding: const EdgeInsets.all(8))
+                      .sized(),
+                ),
               ],
             ),
           ),

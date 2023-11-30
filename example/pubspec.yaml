@@ -9,11 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_animate: 
-    git:
-      url: https://github.com/arthurbcd/flutter_animate/
-      ref: 484dca33a55df1c31d54549971ecee746855ec1e
+  flutter_animate: 4.3.0
   get: ^4.6.5
+  nested: ^1.0.0
   styled_widget: ^0.4.1
   ui_extension:
     path: ../

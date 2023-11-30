@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   animated_value: ^0.0.1
+  nested: ^1.0.0
   flutter:
     sdk: flutter
 

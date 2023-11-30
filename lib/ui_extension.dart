@@ -1,13 +1,26 @@
 library ui_extension;
 
 // import 'dart:ffi';
+import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:animated_value/animated_value.dart';
 import 'package:flutter/material.dart';
+import 'package:nested/nested.dart';
+import 'package:ui_extension/widgets/animated_flexible.dart';
+import 'package:ui_extension/widgets/ui_root.dart';
+
+import 'widgets/ui_widgets.dart';
+
+export 'package:ui_extension/widgets/state_builder.dart';
+export 'package:ui_extension/widgets/ui_root.dart';
+export 'package:ui_extension/widgets/ui_widgets.dart';
+export 'package:ui_extension/widgets/value_builder.dart';
 
 part 'extensions/context.dart';
-part 'extensions/widget.dart';
 part 'extensions/element.dart';
+part 'extensions/widget.dart';
+part 'extensions/ui.dart';
 
 // Todo:
 // - [ ] layout widget extensions
