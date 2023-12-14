@@ -1,17 +1,17 @@
 name: ui_extension
-description: A new Flutter package project.
+description: Extend your ui with smart and easy to use widgets and extensions.
 version: 0.0.1
-homepage:
+homepage: https://www.branvier.com
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   animated_value: ^0.0.1
   nested: ^1.0.0
   flutter:
     sdk: flutter
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:

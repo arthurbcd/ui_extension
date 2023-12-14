@@ -1,46 +1,18 @@
 library ui_extension;
 
-// import 'dart:ffi';
-import 'dart:math' as math;
-import 'dart:ui';
 
-import 'package:animated_value/animated_value.dart';
-import 'package:flutter/material.dart';
-import 'package:nested/nested.dart';
-import 'package:ui_extension/widgets/animated_flexible.dart';
-import 'package:ui_extension/widgets/ui_root.dart';
-
-import 'widgets/ui_widgets.dart';
-
-export 'package:ui_extension/widgets/state_builder.dart';
-export 'package:ui_extension/widgets/ui_root.dart';
+// Ui core
+export 'package:ui_extension/src/ui_list.dart';
+export 'package:ui_extension/src/ui_manager.dart';
+export 'package:ui_extension/widgets/ui.dart';
 export 'package:ui_extension/widgets/ui_widgets.dart';
-export 'package:ui_extension/widgets/value_builder.dart';
+export 'package:ui_extension/extensions/ui_extensions.dart';
 
-part 'extensions/context.dart';
-part 'extensions/element.dart';
-part 'extensions/widget.dart';
-part 'extensions/ui.dart';
+// Ui extensions
+export 'package:ui_extension/extensions/context_extension.dart';
+export 'package:ui_extension/extensions/element_extension.dart';
 
-// Todo:
-// - [ ] layout widget extensions
-// https://pub.dev/packages/styled_widget
+// Ui utils
+export 'package:gap/gap.dart';
+export 'package:ui_extension/utils/gradient_border.dart';
 
-
-// - [ ] layout context extensions
-
-// - [ ] layout widgets
-// https://pub.dev/packages/gap
-
-// - [ ] layout breakpoints
-// https://pub.dev/packages/responsive_builder
-// https://pub.dev/packages/responsive_sizer
-// https://pub.dev/packages/layout
-
-// - [ ] layout transitions
-// https://pub.dev/packages/page_transition
-
-// - [ ] layout dialog, contextless
-// https://pub.dev/packages/awesome_dialog
-// https://pub.dev/packages/flutter_smart_dialog
-// https://pub.dev/packages/asuka

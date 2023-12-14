@@ -1,4 +1,4 @@
-part of '/ui_extension.dart';
+import 'package:flutter/widgets.dart';
 
 /// A [BuildContext] extension for [Element], [State] and [Widget] visitings.
 extension UiContextElementExtension on BuildContext {

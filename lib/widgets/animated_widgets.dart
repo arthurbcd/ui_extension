@@ -101,6 +101,92 @@ class AnimatedConstrainedBox extends AnimatedValue<BoxConstraints?> {
         );
 }
 
+class AnimatedLimitedBox extends AnimatedValue<Size?> {
+  AnimatedLimitedBox({
+    double maxWidth = double.infinity,
+    double maxHeight = double.infinity,
+    super.key,
+    super.curve,
+    super.onEnd,
+    required super.duration,
+    super.child,
+  }) : super(
+          value: Size(maxWidth, maxHeight),
+          lerp: Size.lerp,
+          builder: (_, value, __) {
+            return LimitedBox(
+              maxWidth: value!.width,
+              maxHeight: value.height,
+              child: child,
+            );
+          },
+        );
+}
+
+class _OverflowValue {
+  final AlignmentGeometry alignment;
+  final double? minWidth;
+  final double? maxWidth;
+  final double? minHeight;
+  final double? maxHeight;
+
+  _OverflowValue({
+    required this.alignment,
+    required this.minWidth,
+    required this.maxWidth,
+    required this.minHeight,
+    required this.maxHeight,
+  });
+
+  static _OverflowValue lerp(
+    _OverflowValue? a,
+    _OverflowValue? b,
+    double t,
+  ) {
+    return _OverflowValue(
+      alignment: AlignmentGeometry.lerp(a?.alignment, b?.alignment, t)!,
+      minWidth: lerpDouble(a?.minWidth, b?.minWidth, t),
+      maxWidth: lerpDouble(a?.maxWidth, b?.maxWidth, t),
+      minHeight: lerpDouble(a?.minHeight, b?.minHeight, t),
+      maxHeight: lerpDouble(a?.maxHeight, b?.maxHeight, t),
+    );
+  }
+}
+
+class AnimatedOverflowBox extends AnimatedValue<_OverflowValue> {
+  AnimatedOverflowBox({
+    AlignmentGeometry alignment = Alignment.center,
+    double? minWidth,
+    double? maxWidth,
+    double? minHeight,
+    double? maxHeight,
+    super.key,
+    super.curve,
+    super.onEnd,
+    required super.duration,
+    super.child,
+  }) : super(
+          value: _OverflowValue(
+            alignment: alignment,
+            minWidth: minWidth,
+            maxWidth: maxWidth,
+            minHeight: minHeight,
+            maxHeight: maxHeight,
+          ),
+          lerp: _OverflowValue.lerp,
+          builder: (_, value, __) {
+            return OverflowBox(
+              alignment: value.alignment,
+              minWidth: value.minWidth,
+              maxWidth: value.maxWidth,
+              minHeight: value.minHeight,
+              maxHeight: value.maxHeight,
+              child: child,
+            );
+          },
+        );
+}
+
 class _SizedBoxValue {
   final double? width;
   final double? height;
@@ -191,6 +277,82 @@ class AnimatedDecoratedBox extends AnimatedValue<Decoration?> {
             return DecoratedBox(
               decoration: value!,
               position: position,
+              child: child,
+            );
+          },
+        );
+}
+
+class BorderedBox extends DecoratedBox {
+  BorderedBox({
+    super.key,
+    required BoxBorder border,
+    BorderRadiusGeometry? borderRadius,
+    BoxShape shape = BoxShape.rectangle,
+    super.position = DecorationPosition.background,
+    super.child,
+  }) : super(
+          decoration: BoxDecoration(
+            border: border,
+            borderRadius: borderRadius,
+            shape: shape,
+          ),
+        );
+}
+
+class _BorderedValue {
+  final BoxBorder border;
+  final BorderRadiusGeometry? borderRadius;
+  final BoxShape shape;
+  final DecorationPosition position;
+
+  _BorderedValue({
+    required this.border,
+    required this.borderRadius,
+    required this.shape,
+    required this.position,
+  });
+
+  static _BorderedValue lerp(
+    _BorderedValue? a,
+    _BorderedValue? b,
+    double t,
+  ) {
+    return _BorderedValue(
+      border: BoxBorder.lerp(a?.border, b?.border, t)!,
+      borderRadius:
+          BorderRadiusGeometry.lerp(a?.borderRadius, b?.borderRadius, t),
+      shape: t < 0.5 ? a!.shape : b!.shape,
+      position: t < 0.5 ? a!.position : b!.position,
+    );
+  }
+}
+
+class AnimatedBorderedBox extends AnimatedValue<_BorderedValue> {
+  AnimatedBorderedBox({
+    required BoxBorder border,
+    BorderRadiusGeometry? borderRadius,
+    BoxShape shape = BoxShape.rectangle,
+    DecorationPosition position = DecorationPosition.background,
+    super.key,
+    super.curve,
+    super.onEnd,
+    required super.duration,
+    super.child,
+  }) : super(
+          value: _BorderedValue(
+            border: border,
+            borderRadius: borderRadius,
+            shape: shape,
+            position: position,
+          ),
+          lerp: _BorderedValue.lerp,
+          builder: (_, value, __) {
+            return BorderedBox(
+              border: value.border,
+              borderRadius: value.borderRadius,
+              shape: value.shape,
+              position: value.position,
               child: child,
             );
           },

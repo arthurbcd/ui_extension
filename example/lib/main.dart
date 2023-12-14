@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-// import 'package:styled_widget/styled_widget.dart';
 import 'package:ui_extension/ui_extension.dart';
-// import 'package:styled_widget/styled_widget.dart';
 
 void main() {
   runApp(const MainApp());
 }
-
-am(Animate a) {
-  a.scale();
-}
-
 const s1 = Duration(seconds: 1);
 
 class MainApp extends StatelessWidget {
@@ -19,52 +11,40 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Positioned.
     return MaterialApp(
       home: Scaffold(
-        body: UiPadding(
-          left: 80.0,
-          children: const [
-            UiAlign(alignment: Alignment.bottomCenter),
-            UiPadding(padding: EdgeInsets.all(8), left: 18),
-          ],
-          child: Center(
+        body: Center(
+          child: Ui(
+            children: const [
+              UiPadding(all: 16, left: 8),
+              // NestClipRRect(),
+              // NestPhysicalModel(),
+            ],
             child: Column(
               children: [
-                const Ui(
-                  children: [],
-                ),
-                Ui(
-                  children: const [
-                    UiAlign(alignment: Alignment.center),
-                    UiConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 100)),
-                    UiPadding(padding: EdgeInsets.all(8)),
-                  ],
-                  child: const Text('data')
-                      .ui()
-                      .align(Alignment.center)
-                      .constrained(const BoxConstraints(maxWidth: 100))
-                      .padding(padding: const EdgeInsets.all(8))
-                      .sized(),
-                ),
+                const Text('data')
+                    .ui()
+                    // .rounded(borderRadius: BorderRadius.circular(55))
+                    // .physical(elevation: 5)
+                    .padding(all: 50)
+                    .bordered(
+                        border: GradientBorder.all(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.red,
+                          Colors.blue,
+                        ],
+                      ),
+                    ))
+                // .paddingValue(all: 10)
+                // .clipRRect(borderRadius: BorderRadius.circular(56))
+                // .decorated(const BoxDecoration(color: Colors.red))
+                // .sized(dimension: 150, duration: 300.ms)
               ],
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-// List of widgets that conflict with extensions without withProperty:
-// - Container, Padding and relatives. But we wound't use them anyway, right?
-// - [NetworkImage] scale,
-// - [Image.constructors] scale, width, height, opacity, aligment, color.
-// - [Text] scale, width, height, opacity, aligment, color.
-
-extension on Widget {
-  Widget test(double a) {
-    return this;
   }
 }

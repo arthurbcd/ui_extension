@@ -9,10 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_animate: 4.3.0
-  get: ^4.6.5
-  nested: ^1.0.0
-  styled_widget: ^0.4.1
   ui_extension:
     path: ../
     
