@@ -3,6 +3,7 @@
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
+import 'package:gap/gap.dart';
 import 'package:nested/nested.dart';
 
 import '../widgets/ui.dart';
@@ -10,7 +11,7 @@ import 'ui_manager.dart';
 
 class UiList extends ListBase<Widget> with UiManager<UiList> {
   /// The [Type] of widgets that won't be wrapped by [Ui] children.
-  static final Set<Type> ignoreTypes = {Spacer};
+  static final Set<Type> ignoreTypes = {Spacer, Gap};
 
   const UiList({
     required List<SingleChildWidget> uiChildren,

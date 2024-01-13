@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+// import 'package:bordered/bordered.dart';
+import 'package:bordered/bordered.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nested/nested.dart';
 
@@ -50,7 +52,7 @@ class UiAlign extends UiWidget {
           child: child,
         );
 
-  /// Sets [AlignmentGeometry].
+  /// Sets [Align.alignment].
   final AlignmentGeometry alignment;
 
   /// Sets [Align.heightFactor].
@@ -98,11 +100,17 @@ class UiPadding extends UiWidget {
     super.child,
   });
 
-  /// Sets [EdgeInsetsGeometry]. Fallbacks to shortcuts if null.
+  /// Sets [Padding.padding].
   final EdgeInsetsGeometry? padding;
 
-  /// Shortcut for [EdgeInsetsGeometry]. Ignored if [padding] is set.
-  final double? left, top, right, bottom, horizontal, vertical, all;
+  /// Sets [Padding.padding]. Ignored if [padding] is set.
+  final double? left, top, right, bottom;
+
+  /// Sets [Padding.padding]. Ignored if [left], [top], [right] or [bottom] is set.
+  final double? horizontal, vertical;
+
+  /// Sets [Padding.padding]. Ignored if [horizontal] or [vertical] is set.
+  final double? all;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
@@ -218,6 +226,7 @@ class UiPositioned extends UiWidget {
 }
 
 class UiFlexible extends UiWidget {
+  /// [UiWidget] for [Flexible], or [AnimatedFlexible] if [duration] is present.
   const UiFlexible({
     super.key,
     this.flex = 1,
@@ -227,6 +236,7 @@ class UiFlexible extends UiWidget {
     super.onEnd,
     super.child,
   });
+
   /// Sets [Flexible.flex].
   final int flex;
 
@@ -254,6 +264,7 @@ class UiFlexible extends UiWidget {
 }
 
 class UiExpanded extends UiWidget {
+  /// [UiWidget] for [Expanded], or [AnimatedExpanded] if [duration] is present.
   const UiExpanded({
     super.key,
     this.flex = 1,
@@ -262,6 +273,7 @@ class UiExpanded extends UiWidget {
     super.onEnd,
     super.child,
   });
+
   /// Sets [Expanded.flex].
   final int flex;
 
@@ -287,18 +299,43 @@ class UiConstrainedBox extends UiWidget {
   /// [UiWidget] for [ConstrainedBox], or [AnimatedConstrainedBox] if [duration] is present.
   const UiConstrainedBox({
     super.key,
-    required this.constraints,
+    this.constraints,
+    this.minSize,
+    this.maxSize,
+    this.minWidth,
+    this.maxWidth,
+    this.minHeight,
+    this.maxHeight,
+    this.minDimension,
+    this.maxDimension,
     super.duration,
     super.curve,
     super.onEnd,
     super.child,
   });
 
-  /// Sets [BoxConstraints].
-  final BoxConstraints constraints;
+  /// Sets [ConstrainedBox.constraints].
+  final BoxConstraints? constraints;
+
+  /// Sets [ConstrainedBox.constraints]. Ignored if [constraints] is set.
+  final Size? minSize, maxSize;
+
+  /// Sets [ConstrainedBox.constraints]. Ignored if [minSize] or [maxSize] is set.
+  final double? minWidth, minHeight, maxWidth, maxHeight;
+
+  /// Sets [ConstrainedBox.constraints]. Ignored if [minWidth], [maxWidth], [minHeight] or [maxHeight] is set.
+  final double? minDimension, maxDimension;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    final constraints = this.constraints ??
+        const BoxConstraints().copyWith(
+          minWidth: minSize?.width ?? minWidth ?? minDimension,
+          minHeight: minSize?.height ?? minHeight ?? minDimension,
+          maxWidth: maxSize?.width ?? maxWidth ?? maxDimension,
+          maxHeight: maxSize?.height ?? maxHeight ?? maxDimension,
+        );
+
     return duration == null
         ? ConstrainedBox(
             constraints: constraints,
@@ -318,8 +355,10 @@ class UiLimitedBox extends UiWidget {
   /// [UiWidget] for [LimitedBox], or [AnimatedLimitedBox] if [duration] is present.
   const UiLimitedBox({
     super.key,
-    required this.maxWidth,
-    required this.maxHeight,
+    this.maxSize,
+    this.maxWidth,
+    this.maxHeight,
+    this.maxDimension,
     super.duration,
     super.curve,
     super.onEnd,
@@ -327,19 +366,28 @@ class UiLimitedBox extends UiWidget {
   });
 
   /// Sets [LimitedBox] values.
-  final double maxWidth, maxHeight;
+  final Size? maxSize;
+
+  /// Sets [LimitedBox] values. Ignored if [maxSize] is set.
+  final double? maxWidth, maxHeight;
+
+  /// Sets [LimitedBox] values. Ignored if [maxWidth] or [maxHeight] is set.
+  final double? maxDimension;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    final w = maxSize?.width ?? maxWidth ?? maxDimension ?? double.infinity;
+    final h = maxSize?.height ?? maxHeight ?? maxDimension ?? double.infinity;
+
     return duration == null
         ? LimitedBox(
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
+            maxWidth: w,
+            maxHeight: h,
             child: child,
           )
         : AnimatedLimitedBox(
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
+            maxWidth: w,
+            maxHeight: h,
             duration: duration!,
             curve: curve,
             onEnd: onEnd,
@@ -349,13 +397,18 @@ class UiLimitedBox extends UiWidget {
 }
 
 class UiOverflowBox extends UiWidget {
+  /// [UiWidget] for [OverflowBox], or [AnimatedOverflowBox] if [duration] is present.
   const UiOverflowBox({
     super.key,
-    required this.alignment,
+    this.alignment = Alignment.center,
+    this.minSize,
+    this.maxSize,
     this.minWidth,
     this.maxWidth,
     this.minHeight,
     this.maxHeight,
+    this.minDimension,
+    this.maxDimension,
     super.duration,
     super.curve,
     super.onEnd,
@@ -366,10 +419,21 @@ class UiOverflowBox extends UiWidget {
   final AlignmentGeometry alignment;
 
   /// Sets [OverflowBox] values.
-  final double? minWidth, maxWidth, minHeight, maxHeight;
+  final Size? minSize, maxSize;
+
+  /// Sets [OverflowBox] values. Ignored if [minSize] or [maxSize] is set.
+  final double? minWidth, minHeight, maxWidth, maxHeight;
+
+  /// Sets [OverflowBox] values. Ignored if [minWidth], [maxWidth], [minHeight] or [maxHeight] is set.
+  final double? minDimension, maxDimension;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    final minWidth = minSize?.width ?? this.minWidth ?? minDimension;
+    final minHeight = minSize?.height ?? this.minHeight ?? minDimension;
+    final maxWidth = maxSize?.width ?? this.maxWidth ?? maxDimension;
+    final maxHeight = maxSize?.height ?? this.maxHeight ?? maxDimension;
+
     return duration == null
         ? OverflowBox(
             alignment: alignment,
@@ -394,10 +458,13 @@ class UiOverflowBox extends UiWidget {
 }
 
 class UiSizedBox extends UiWidget {
+  /// [UiWidget] for [SizedBox], or [AnimatedSizedBox] if [duration] is present.
   const UiSizedBox({
     super.key,
+    this.size,
     this.width,
     this.height,
+    this.dimension,
     super.duration,
     super.curve,
     super.onEnd,
@@ -405,48 +472,19 @@ class UiSizedBox extends UiWidget {
   });
 
   /// Sets [SizedBox] values.
+  final Size? size;
+
+  /// Sets [SizedBox] values. Ignored if [size] is set.
   final double? width, height;
 
-  const UiSizedBox.expand({
-    super.key,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-  })  : width = double.infinity,
-        height = double.infinity;
-
-  const UiSizedBox.shrink({
-    super.key,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-  })  : width = 0.0,
-        height = 0.0;
-
-  UiSizedBox.fromSize({
-    super.key,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-    Size? size,
-  })  : width = size?.width,
-        height = size?.height;
-
-  const UiSizedBox.square({
-    super.key,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-    double? dimension,
-  })  : width = dimension,
-        height = dimension;
+  /// Sets [SizedBox] values. Ignored if [width] or [height] is set.
+  final double? dimension;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
+    final width = size?.width ?? this.width ?? dimension;
+    final height = size?.height ?? this.height ?? dimension;
+
     return duration == null
         ? SizedBox(
             width: width,
@@ -465,6 +503,7 @@ class UiSizedBox extends UiWidget {
 }
 
 class UiDecoratedBox extends UiWidget {
+  /// [UiWidget] for [DecoratedBox], or [AnimatedDecoratedBox] if [duration] is present.
   const UiDecoratedBox({
     super.key,
     required this.decoration,
@@ -500,110 +539,103 @@ class UiDecoratedBox extends UiWidget {
   }
 }
 
-class UiBorderedBox extends UiWidget {
-  /// [UiWidget] for [BorderedBox], or [AnimatedBorderedBox] if [duration] is present.
-  const UiBorderedBox({
+class UiBordered extends UiWidget {
+  /// [UiWidget] for [Bordered], or [AnimatedBordered] if [duration] is present.
+  const UiBordered({
     super.key,
+    // border.
     this.border,
-    this.all,
-    this.left,
-    this.top,
-    this.right,
-    this.bottom,
-    this.horizontal,
-    this.vertical,
+    this.gradient,
     this.color = const Color(0xFF000000),
+    this.width = 0.0,
     this.style = BorderStyle.solid,
-    this.strokeAlign = BorderSide.strokeAlignInside,
+    this.strokeAlign = BorderSide.strokeAlignInside, // -1.0
+
+    // clip.
     this.borderRadius,
-    this.radius,
-    this.radiusX,
-    this.radiusY,
+    this.depth = 1.0,
+    this.radius = 0.0,
     this.shape = BoxShape.rectangle,
-    this.position = DecorationPosition.background,
+    this.clipBehavior = Clip.antiAlias,
+
+    // shadow.
+    this.elevation = 0.0,
+    this.shadowColor = const Color(0xFF000000),
+
+    // ui.
     super.duration,
     super.curve,
     super.onEnd,
     super.child,
   });
 
-  /// Sets [BoxBorder]. Fallbacks to shortcuts if null.
+  /// Sets [Bordered.border].
   final BoxBorder? border;
 
-  /// Shortcut for [BoxBorder]. Ignored if [border] is set.
-  final double? left, top, right, bottom, horizontal, vertical, all;
+  /// Sets [UiBorder.gradient] as border. Ignored if [border] is set.
+  final Gradient? gradient;
 
-  /// Shortcut for [BoxBorder]. Ignored if [border] is set.
+  /// Sets [BorderSide.color] as border. Ignored if [gradient] is set.
   final Color color;
 
-  /// Shortcut for [BoxBorder]. Ignored if [border] is set.
+  /// Sets [BorderSide.width] as border. Ignored if [border] is set.
+  final double width;
+
+  /// Sets [BorderSide.style] as border. Ignored if [border] is set.
   final BorderStyle style;
 
-  /// Shortcut for [BoxBorder]. Ignored if [border] is set.
+  /// Sets [BorderSide.strokeAlign] as border. Ignored if [border] is set.
   final double strokeAlign;
 
-  /// Sets [BorderRadiusGeometry]. Fallbacks to shortcuts if null.
+  /// Sets [Bordered.borderRadius].
   final BorderRadiusGeometry? borderRadius;
 
-  /// Shortcut for [BorderRadiusGeometry]. Ignored if [borderRadius] is set.
-  final double? radius, radiusX, radiusY;
+  /// Sets [UiRadius] as borderRadius. Ignored if [borderRadius] is set.
+  final double depth, radius;
 
-  /// Sets [BoxShape].
+  /// Sets [Bordered.shape]. Use either it or [borderRadius].
   final BoxShape shape;
 
-  /// Sets [DecorationPosition].
-  final DecorationPosition position;
+  /// Sets [Bordered.clipBehavior].
+  final Clip clipBehavior;
+
+  /// Sets [Bordered.elevation].
+  final double elevation;
+
+  /// Sets [Bordered.shadowColor].
+  final Color shadowColor;
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    //radius
-    final r = Radius.elliptical(radiusX ?? radius ?? 0, radiusY ?? radius ?? 0);
-
-    //width
-    final wL = left ?? horizontal ?? all;
-    final wT = top ?? vertical ?? all;
-    final wR = right ?? horizontal ?? all;
-    final wB = bottom ?? vertical ?? all;
-
-    BorderSide side(double? width) {
-      if (width == null) return BorderSide.none;
-      return BorderSide(
-        color: color,
-        style: style,
-        strokeAlign: strokeAlign,
-        width: width,
-      );
-    }
-
     final border = this.border ??
-        Border(
-          left: side(wL),
-          top: side(wT),
-          right: side(wR),
-          bottom: side(wB),
+        UiBorder.all(
+          gradient: gradient,
+          color: color,
+          width: width,
+          style: style,
+          strokeAlign: strokeAlign,
         );
 
     final borderRadius = this.borderRadius ??
-        BorderRadius.only(
-          topLeft: wT != null || wL != null ? r : Radius.zero,
-          topRight: wT != null || wR != null ? r : Radius.zero,
-          bottomRight: wB != null || wR != null ? r : Radius.zero,
-          bottomLeft: wB != null || wL != null ? r : Radius.zero,
-        );
+        BorderRadius.all(UiRadius.circular(radius, depth: depth));
 
     return duration == null
-        ? BorderedBox(
+        ? Bordered(
             border: border,
             borderRadius: borderRadius,
+            clipBehavior: clipBehavior,
+            elevation: elevation,
+            shadowColor: shadowColor,
             shape: shape,
-            position: position,
             child: child,
           )
-        : AnimatedBorderedBox(
+        : AnimatedBordered(
             border: border,
             borderRadius: borderRadius,
+            clipBehavior: clipBehavior,
             shape: shape,
-            position: position,
+            elevation: elevation,
+            shadowColor: shadowColor,
             duration: duration!,
             curve: curve,
             onEnd: onEnd,
@@ -613,6 +645,7 @@ class UiBorderedBox extends UiWidget {
 }
 
 class UiOpacity extends UiWidget {
+  /// [UiWidget] for [Opacity], or [AnimatedOpacity] if [duration] is present.
   const UiOpacity({
     super.key,
     required this.opacity,
@@ -647,112 +680,6 @@ class UiOpacity extends UiWidget {
           );
   }
 }
-
-/// TODO: Create RoundedBox
-class UiClipRRect extends UiWidget {
-  const UiClipRRect({
-    super.key,
-    this.borderRadius = BorderRadius.zero,
-    this.clipper,
-    this.clipBehavior = Clip.antiAlias,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-  });
-
-  /// Sets [ClipRRect.borderRadius].
-  final BorderRadiusGeometry borderRadius;
-
-  /// Sets [ClipRRect.clipper].
-  final CustomClipper<RRect>? clipper;
-
-  /// Sets [ClipRRect.clipBehavior].
-  final Clip clipBehavior;
-
-  @override
-  Widget buildWithChild(BuildContext context, Widget? child) {
-    return duration == null
-        ? ClipRRect(
-            borderRadius: borderRadius,
-            clipper: clipper,
-            clipBehavior: clipBehavior,
-            child: child,
-          )
-        : AnimatedClipRRect(
-            borderRadius: borderRadius,
-            clipper: clipper,
-            clipBehavior: clipBehavior,
-            duration: duration!,
-            curve: curve,
-            onEnd: onEnd,
-            child: child,
-          );
-  }
-}
-
-class UiPhysicalModel extends UiWidget {
-  /// [UiWidget] for [PhysicalModel], or [AnimatedPhysicalModel] if [duration] is present.
-  const UiPhysicalModel({
-    super.key,
-    this.shape = BoxShape.rectangle,
-    this.elevation = 0.0,
-    this.color = const Color(0xFF000000),
-    this.shadowColor = const Color(0xFF000000),
-    this.borderRadius = BorderRadius.zero,
-    this.clipBehavior = Clip.none,
-    super.duration,
-    super.curve,
-    super.onEnd,
-    super.child,
-  });
-
-  /// Sets [PhysicalModel.shape].
-  final BoxShape shape;
-
-  /// Sets [PhysicalModel.elevation].
-  final double elevation;
-
-  /// Sets [PhysicalModel.color].
-  final Color color;
-
-  /// Sets [PhysicalModel.shadowColor].
-  final Color shadowColor;
-
-  /// Sets [PhysicalModel.borderRadius].
-  final BorderRadius borderRadius;
-
-  /// Sets [PhysicalModel.clipBehavior].
-  final Clip clipBehavior;
-
-  @override
-  Widget buildWithChild(BuildContext context, Widget? child) {
-    assert(duration == null || child != null);
-    return duration == null
-        ? PhysicalModel(
-            shape: shape,
-            elevation: elevation,
-            color: color,
-            shadowColor: shadowColor,
-            borderRadius: borderRadius,
-            clipBehavior: clipBehavior,
-            child: child,
-          )
-        : AnimatedPhysicalModel(
-            shape: shape,
-            elevation: elevation,
-            color: color,
-            shadowColor: shadowColor,
-            borderRadius: borderRadius,
-            clipBehavior: clipBehavior,
-            duration: duration!,
-            curve: curve,
-            onEnd: onEnd,
-            child: child!,
-          );
-  }
-}
-
 class UiColoredBox extends UiWidget {
   /// [UiWidget] for [ColoredBox], or [AnimatedColoredBox] if [duration] is present.
   const UiColoredBox({

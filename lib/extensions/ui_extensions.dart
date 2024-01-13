@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:nested/nested.dart';
-import 'package:ui_extension/src/ui_list.dart';
 
+import '../src/ui_list.dart';
 import '../src/ui_manager.dart';
 import '../widgets/ui.dart';
 import '../widgets/ui_widgets.dart';
@@ -157,14 +157,23 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
       ));
 
   /// Adds [UiConstrainedBox].
-  T constrained(
-    BoxConstraints constraints, {
+  T constrained({
+    BoxConstraints? constraints, // overrides below
+    double? minWidth,
+    double? maxWidth,
+    double? minHeight,
+    double? maxHeight,
+    //
     Duration? duration,
     Curve? curve,
     VoidCallback? onEnd,
   }) =>
       addChild(UiConstrainedBox(
         constraints: constraints,
+        minWidth: minWidth,
+        maxWidth: maxWidth,
+        minHeight: minHeight,
+        maxHeight: maxHeight,
         duration: duration,
         curve: curve,
         onEnd: onEnd,
@@ -272,48 +281,6 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
         onEnd: onEnd,
       ));
 
-  /// Adds [UiClipRRect].
-  T rounded({
-    BorderRadiusGeometry borderRadius = BorderRadius.zero,
-    CustomClipper<RRect>? clipper,
-    Clip clipBehavior = Clip.antiAlias,
-    Duration? duration,
-    Curve? curve,
-    VoidCallback? onEnd,
-  }) =>
-      addChild(UiClipRRect(
-        borderRadius: borderRadius,
-        clipper: clipper,
-        clipBehavior: clipBehavior,
-        duration: duration,
-        curve: curve,
-        onEnd: onEnd,
-      ));
-
-  /// Adds [UiPhysicalModel].
-  T physical({
-    double elevation = 0.0,
-    Color color = const Color(0x00000000),
-    Color shadowColor = const Color(0xFF000000),
-    Clip clipBehavior = Clip.none,
-    BoxShape shape = BoxShape.rectangle,
-    BorderRadius borderRadius = BorderRadius.zero,
-    Duration? duration,
-    Curve? curve,
-    VoidCallback? onEnd,
-  }) =>
-      addChild(UiPhysicalModel(
-        elevation: elevation,
-        color: color,
-        shadowColor: shadowColor,
-        clipBehavior: clipBehavior,
-        shape: shape,
-        borderRadius: borderRadius,
-        duration: duration,
-        curve: curve,
-        onEnd: onEnd,
-      ));
-
   /// Adds [UiTransform.rotate].
   T rotated(
     double angle, {
@@ -401,49 +368,46 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
         onEnd: onEnd,
       ));
 
-  /// Adds [UiBorderedBox].
+  /// Adds [UiBordered].
   T bordered({
+    // border.
     BoxBorder? border, // overrides below
-    double? all,
-    double? left,
-    double? top,
-    double? right,
-    double? bottom,
-    double? horizontal,
-    double? vertical,
+    Gradient? gradient,
     Color color = const Color(0xFF000000),
+    double width = 0.0,
     BorderStyle style = BorderStyle.solid,
     double strokeAlign = BorderSide.strokeAlignInside,
-    //
+
+    // clip.
     BorderRadiusGeometry? borderRadius, // overrides below
-    double? radius,
-    double? radiusX,
-    double? radiusY,
-    //
+    double depth = 1.0,
+    double radius = 0.0,
     BoxShape shape = BoxShape.rectangle,
-    DecorationPosition position = DecorationPosition.background,
+    Clip clipBehavior = Clip.antiAlias,
+
+    // shadow.
+    double elevation = 0.0,
+    Color shadowColor = const Color(0xFF000000),
+
+    // ui.
     Duration? duration,
     Curve? curve,
     VoidCallback? onEnd,
   }) {
-    return addChild(UiBorderedBox(
+    return addChild(UiBordered(
       border: border,
-      all: all,
-      left: left,
-      top: top,
-      right: right,
-      bottom: bottom,
-      horizontal: horizontal,
-      vertical: vertical,
-      borderRadius: borderRadius,
+      gradient: gradient,
       color: color,
+      width: width,
       style: style,
       strokeAlign: strokeAlign,
+      borderRadius: borderRadius,
+      depth: depth,
       radius: radius,
-      radiusX: radiusX,
-      radiusY: radiusY,
       shape: shape,
-      position: position,
+      clipBehavior: clipBehavior,
+      elevation: elevation,
+      shadowColor: shadowColor,
       duration: duration,
       curve: curve,
       onEnd: onEnd,
