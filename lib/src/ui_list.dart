@@ -34,7 +34,7 @@ class UiList extends ListBase<Widget> with UiManager<UiList> {
   @override
   UiList addChild(SingleChildWidget child) {
     return UiList(
-      uiChildren: _children + [child],
+      uiChildren: [child] + _children,
       children: _widgets,
       ignoreTypes: _ignoreTypes,
     );
@@ -43,7 +43,7 @@ class UiList extends ListBase<Widget> with UiManager<UiList> {
   @override
   UiList addChildren(List<SingleChildWidget> children) {
     return UiList(
-      uiChildren: _children + children,
+      uiChildren: children + _children,
       children: _widgets,
       ignoreTypes: _ignoreTypes,
     );

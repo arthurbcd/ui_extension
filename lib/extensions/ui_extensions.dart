@@ -159,6 +159,10 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
   /// Adds [UiConstrainedBox].
   T constrained({
     BoxConstraints? constraints, // overrides below
+    Size? minSize,
+    Size? maxSize,
+    double? minDimension,
+    double? maxDimension,
     double? minWidth,
     double? maxWidth,
     double? minHeight,
@@ -170,6 +174,10 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
   }) =>
       addChild(UiConstrainedBox(
         constraints: constraints,
+        minSize: minSize,
+        maxSize: maxSize,
+        minDimension: minDimension,
+        maxDimension: maxDimension,
         minWidth: minWidth,
         maxWidth: maxWidth,
         minHeight: minHeight,
