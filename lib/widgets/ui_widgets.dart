@@ -36,21 +36,15 @@ abstract class UiWidget extends SingleChildStatelessWidget {
 class UiAlign extends UiWidget {
   /// Creates a [UiWidget] that builder [Align], or [AnimatedAlign] if [duration] is present.
   const UiAlign({
-    Key? key,
+    super.key,
     required this.alignment,
     this.heightFactor,
     this.widthFactor,
-    Duration? duration,
-    Curve? curve,
-    VoidCallback? onEnd,
-    Widget? child,
-  }) : super(
-          key: key,
-          duration: duration,
-          curve: curve,
-          onEnd: onEnd,
-          child: child,
-        );
+    super.duration,
+    super.curve,
+    super.onEnd,
+    super.child,
+  });
 
   /// Sets [Align.alignment].
   final AlignmentGeometry alignment;
@@ -79,6 +73,42 @@ class UiAlign extends UiWidget {
             onEnd: onEnd,
             child: child,
           );
+  }
+}
+
+class Alive extends StatefulWidget {
+  /// Applies the [AutomaticKeepAliveClientMixin] to [child].
+  const Alive({super.key, required this.child});
+  final Widget child;
+
+  @override
+  State<Alive> createState() => _AliveState();
+}
+
+class _AliveState extends State<Alive> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
+}
+
+class UiAlive extends UiWidget {
+  /// [UiWidget] for [Alive].
+  const UiAlive({
+    super.key,
+    super.child,
+  });
+
+  @override
+  Widget buildWithChild(BuildContext context, Widget? child) {
+    assert(child != null);
+    return Alive(
+      child: child!,
+    );
   }
 }
 
@@ -680,6 +710,7 @@ class UiOpacity extends UiWidget {
           );
   }
 }
+
 class UiColoredBox extends UiWidget {
   /// [UiWidget] for [ColoredBox], or [AnimatedColoredBox] if [duration] is present.
   const UiColoredBox({

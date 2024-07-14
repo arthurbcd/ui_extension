@@ -1,9 +1,11 @@
 # Changelog
 
-## 0.2.0
+## 0.2.1
 
 * Added new context extensions.
 * Updated `bordered` dependency to 0.2.0.
+* Updated linter.
+* Added UiAlive widget.
 
 ## 0.1.1
 

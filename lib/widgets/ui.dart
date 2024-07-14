@@ -17,12 +17,11 @@ class Ui extends Nested implements UiManager<Ui> {
   /// Creates a [Ui] widget.
   Ui({
     super.key,
-    required List<SingleChildWidget> children,
-    Widget? child,
+    required super.children,
+    super.child,
   })  : assert(children.isNotEmpty),
         _children = children,
-        _child = child,
-        super(child: child, children: children);
+        _child = child;
 
   Ui.empty({
     super.key,

@@ -50,6 +50,8 @@ extension UiPositionExtension<T extends UiManager<T>> on T {
         widthFactor: widthFactor,
       ));
 
+  T alive() => addChild(const UiAlive());
+
   /// Adds [UiPadding].
   T padding({
     EdgeInsetsGeometry? padding, // overrides below
